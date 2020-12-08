@@ -40,6 +40,8 @@ public class Logica {
 		
 		if(op.hasError())throw new PluginErrorException("Plugin Execution Error");
 		
+		System.out.println(result);
+		
 		return result;
 		
 	}
