@@ -24,11 +24,7 @@ public class Logica {
 	
 	
 	
-	public void loadPlugin(){
-		
-		
-		
-	}
+	
 	
 	public int operate(String name, int p1, int p2) throws PluginErrorException, DivideByZeroException, InvalidOperatorException{
 		
@@ -93,43 +89,41 @@ public class Logica {
 		File directory = new File(System.getProperty("user.dir")+File.separator+"Plugins");
 		
 		
-		PluginClassLoader myClassLoader = new PluginClassLoader(directory);
+		PluginClassLoader myClassLoader = new PluginClassLoader(directory);	
 		
 		
-		
-		
-		if (true) {
-		
-			String[] files = directory.list();
+		String[] files = directory.list();
 			
 			
 			
-			for (int i=0; i<files.length; i++) {
+		for (int i=0; i<files.length; i++) {
 				
 				    
-					if (files[i].endsWith(".class")){
+			if (files[i].endsWith(".class")){
 						
 				
-					Class c = myClassLoader.loadClass("Logica."+files[i].substring(0, files[i].indexOf(".")));
+				Class c = myClassLoader.loadClass("Logica."+files[i].substring(0, files[i].indexOf(".")));
 					
-					Class[] intf = c.getInterfaces();
-					for (int j=0; j<intf.length; j++) {
-						if (intf[j].getName().equals("Logica.PluginFunction")) {
+				Class[] intf = c.getInterfaces();
+				for (int j=0; j<intf.length; j++) {
+					if (intf[j].getName().equals("Logica.PluginFunction")) {
 							
-							@SuppressWarnings("unchecked")
-							PluginFunction pf = (PluginFunction) c.getDeclaredConstructor().newInstance();
-							plugins.add(pf);
+						@SuppressWarnings("unchecked")
+						PluginFunction pf = (PluginFunction) c.getDeclaredConstructor().newInstance();
+						plugins.add(pf);
 							
 						
 						}
 					}
 			}
 			}
-		}
+		
 	}
 	
 	
-	
+	public void actualizar() throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		getPlugins();
+	}
 	
 	
 }

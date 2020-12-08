@@ -19,11 +19,14 @@ public class Potencia implements PluginFunction {
 		
 		if(op2 < 0) throw new InvalidOperatorException("Negative exponent is not valid for this version");
 		
+		System.out.println("Hola");
+		
 		i = 0;
 		result = 1;
 		
 		while(i < op2){
-			result = result * op1;			
+			result = result * op1;
+			i++;
 		}	
 		
 		return result;
