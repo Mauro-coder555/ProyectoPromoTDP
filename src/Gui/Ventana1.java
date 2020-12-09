@@ -17,6 +17,8 @@ import Logica.PluginErrorException;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
+
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -25,13 +27,15 @@ import javax.swing.JButton;
 public class Ventana1 {
 
 	private JFrame frame;
+	private Container miContenedor;
 	private Logica miLogica;
 	private JComboBox<String> menu;
 	private JPanel panelMenu;
 	private JPanel panelResultado;
 	private JLabel etiquetaResultado;
 	private boolean resultadoValido;
-
+	private List<String> operaciones;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -61,37 +65,31 @@ public class Ventana1 {
 	 */
 	private void initialize() {
 		
-		
+	
 		resultadoValido = true;
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+		miContenedor = frame.getContentPane();
 		panelMenu = new JPanel();
 		panelMenu.setBounds(0, 0, 434, 119);
 		panelMenu.setForeground(Color.LIGHT_GRAY);
 		frame.getContentPane().add(panelMenu);
 		panelMenu.setLayout(null);
+	
 		
-		menu = getMenu();
+		getMenu();
 	
 		menu.setBounds(212, 12, 200, 20);
-		panelMenu.add(menu);
+		
 		
 		JButton btnNewButton = new JButton("Actualizar");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					miLogica.actualizar();
-				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-						| IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-						| SecurityException e1) {e1.printStackTrace();}
-				initialize();
-			}
-		});
-		btnNewButton.setBounds(28, 11, 89, 23);
+		OyenteActualizar oyenteAct = new OyenteActualizar();
+		btnNewButton.addActionListener(oyenteAct);
+		
+		btnNewButton.setBounds(28, 11, 100, 23);
 		panelMenu.add(btnNewButton);
 		
 		panelResultado = new JPanel();
@@ -109,33 +107,40 @@ public class Ventana1 {
 	}
 
 	 protected void borrar() {
-		 panelResultado.removeAll();
-		 panelMenu.removeAll();
+		operaciones.removeAll(operaciones);
+		menu.removeAllItems();		
+		panelMenu.remove(menu);
+				
 	}
 
-	private JComboBox<String> getMenu() {
+	private void getMenu() {
 		 	Oyente oyente;
-		    JComboBox<String> menuBotones = new JComboBox<String>();
+		 	
+		 	
+		 	
+		    menu = new JComboBox<String>();
+		    
 		    
 		    oyente = new Oyente();
-		 	cargarMenuBotones(menuBotones); 
-		 	menuBotones.addActionListener(oyente);
+		 	cargarMenuBotones(); 
+		 	menu.addActionListener(oyente);
+		 	panelMenu.add(menu);
 		 	
-		 	
-	        return menuBotones;
+	        
 	    }
 
 
-	private void cargarMenuBotones(JComboBox<String> menuBotones) {
-		List<String> operaciones;
+	private void cargarMenuBotones() {
+		
 		
 		operaciones = miLogica.getOperations();
-	//	menuBotones.addItem("Operaciones Disponibles");
-	//	(menuBotones.getItemAt(0)).
+		System.out.println("El largo de la lista de plugins es:"+operaciones.size());
+		
+		 
 		
 		for (String nombre : operaciones){
-		
-			menuBotones.addItem(nombre);			
+			System.out.println(nombre);
+			menu.addItem(nombre);			
 		}
 		
 	}
@@ -179,6 +184,19 @@ public class Ventana1 {
 		
 	}
 	
+	private class OyenteActualizar implements ActionListener{
+
+		
+		public void actionPerformed(ActionEvent arg0) {	
+			    menu.removeAllItems();		
+			    crearLogica();
+				initialize();	
+				
+		}
+		
+		
+	}
+	
 	private boolean isNumeric(String cadena) {
 
         boolean resultado;
@@ -205,7 +223,7 @@ public class Ventana1 {
 			try {
 				miLogica = new Logica();
 				
-				System.out.println("Cree Logica");
+				
 			} catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 					| SecurityException e) {
 				

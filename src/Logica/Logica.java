@@ -124,6 +124,7 @@ public class Logica {
 	
 	
 	public void actualizar() throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		plugins = new ArrayList<PluginFunction>();
 		getPlugins();
 	}
 	
